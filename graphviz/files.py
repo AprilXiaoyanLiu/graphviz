@@ -17,7 +17,7 @@ ENGINES = {'dot', 'neato', 'twopi', 'circo', 'fdp', 'sfdp'}
 
 class Base(object):
 
-    _cmd = '%(engine)s -T%(format)s -O %(filepath)s'
+    _args = '%(engine)s -T%(format)s -O %(filepath)s'.split()
 
     _format = 'pdf'
     _engine = 'dot'
@@ -105,8 +105,8 @@ class File(Base):
             return
 
         params = {'engine': self._engine, 'format': self._format, 'filepath': filepath}
-        cmd = self._cmd % params
-        returncode = subprocess.Popen(cmd.split()).wait()
+        args = [(arg % params) for arg in self._args]
+        returncode = subprocess.Popen(args).wait()
 
         rendered = '%s.%s' % (filepath, self._format)
 
